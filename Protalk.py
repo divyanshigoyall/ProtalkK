@@ -37,8 +37,8 @@ if "session_id" not in st.session_state:
 @st.cache_resource
 def init_database():
     DB_CONNECT = st.secrets["CONNECTION_DB"]
-GEMINI_API = st.secrets["GEMINI_API"]
-os.environ["GOOGLE_API_KEY"] = str(GEMINI_API)
+    GEMINI_API = st.secrets["GEMINI_API"]
+    os.environ["GOOGLE_API_KEY"] = str(GEMINI_API)
 
     client = pymongo.MongoClient(DB_CONNECT)
     db = client.E_Commerce
