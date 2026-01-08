@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import pymongo
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import MongoDBAtlasVectorSearch
-from langchain.memory import ConversationBufferMemory
+from langchain.memory.buffer import ConversationBufferMemory
 from langchain.agents import Tool, initialize_agent, AgentType
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chains.combine_documents import create_stuff_documents_chain
