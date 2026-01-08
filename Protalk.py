@@ -224,28 +224,49 @@ def rag_qa(query: str) -> str:
 # Initialize agent
 @st.cache_resource
 def init_agent():
+    memory = ConversationBufferMemory(
+        memory_key="chat_history",
+        return_messages=True
+    )
+
     tools = [
-        Tool(name="add_to_cart", func=add_to_cart_tool, 
-            description="Add product to cart. Input: 'product_name, quantity'"),
-        Tool(name="show_cart", func=lambda _: show_cart(),
-            description="Display cart contents"),
-        Tool(name="place_order", func=lambda _: place_order(),
-            description="Place order for cart items"),
-        Tool(name="product_qa", func=rag_qa,
-            description="Answer product questions"),
-        Tool(name="remove_from_cart", func=remove_from_cart_tool,
-            description="Remove from cart. Input: 'product_name/id, quantity'")
+        Tool(
+            name="add_to_cart",
+            func=add_to_cart_tool,
+            description="Add product to cart. Input: 'product_name, quantity'"
+        ),
+        Tool(
+            name="show_cart",
+            func=lambda _: show_cart(),
+            description="Display cart contents"
+        ),
+        Tool(
+            name="place_order",
+            func=lambda _: place_order(),
+            description="Place order for cart items"
+        ),
+        Tool(
+            name="product_qa",
+            func=rag_qa,
+            description="Answer product questions"
+        ),
+        Tool(
+            name="remove_from_cart",
+            func=remove_from_cart_tool,
+            description="Remove from cart. Input: 'product_name/id, quantity'"
+        ),
     ]
-    
+
     agent = initialize_agent(
-        tools, llm, 
+        tools=tools,                 # 🔥 keyword args ONLY
+        llm=llm,
         agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
-        memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True),
+        memory=memory,
         verbose=False
     )
+
     return agent
 
-agent = init_agent()
 
 # Helper functions
 def save_message_to_db(session_id, message, sender="user"):
