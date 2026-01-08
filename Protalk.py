@@ -53,12 +53,17 @@ client, db, collection, chat_history_collection, cart_col, orders_col = init_dat
 # Initialize AI components
 @st.cache_resource
 def init_ai_components():
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        temperature=0,
-        max_tokens=790
+    embeddings = GoogleGenerativeAIEmbeddings(
+        model="models/embedding-001"
     )
+
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-1.5-flash",
+        temperature=0,
+        max_tokens=790,
+        transport="rest"   # 🔥 THIS IS THE MAGIC LINE
+    )
+
     vectorStore = MongoDBAtlasVectorSearch(
         collection=collection,
         embedding=embeddings,
@@ -66,10 +71,13 @@ def init_ai_components():
         text_key="embedding_text",
         embedding_key="embedding"
     )
-    retriever = vectorStore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
-    return llm, retriever
 
-llm, retriever = init_ai_components()
+    retriever = vectorStore.as_retriever(
+        search_type="similarity",
+        search_kwargs={"k": 10}
+    )
+
+    return llm, retriever
 
 # Tool functions
 def add_to_cart_tool(input_str: str) -> str:
