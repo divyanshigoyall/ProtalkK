@@ -1,4 +1,6 @@
-langchain
+pymongo
+dnspython
+
 langchain-google-genai
 pymongo
 
@@ -18,3 +20,4 @@ pandas
 scikit-learn
 requests
 pydantic
+
